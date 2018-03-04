@@ -1,0 +1,24 @@
+{
+  "name": "webrcon-cli",
+  "version": "0.0.1",
+  "description": "Webrcon-cli allows you to connect webrcon suppoerted servers. Eg. Rust",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cultti/webrcon-cli.git"
+  },
+  "keywords": [
+    "webrcon",
+    "cli",
+    "rust"
+  ],
+  "author": "Timo Salola <timo@salola.fi>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Cultti/webrcon-cli/issues"
+  },
+  "homepage": "https://github.com/Cultti/webrcon-cli#readme"
+}
