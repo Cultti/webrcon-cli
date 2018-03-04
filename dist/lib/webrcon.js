@@ -66,6 +66,7 @@ var WebRcon = /** @class */ (function () {
             var packet = _this._parsePacket(data);
             if (!_this._resolves[packet.Identifier]) {
                 // Some other message...
+                return;
             }
             _this._resolves[packet.Identifier](packet.Message);
         };

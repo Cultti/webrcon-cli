@@ -53,6 +53,7 @@ export class WebRcon {
         
         if (!this._resolves[packet.Identifier]) {
             // Some other message...
+            return;
         }
 
         this._resolves[packet.Identifier](packet.Message);
