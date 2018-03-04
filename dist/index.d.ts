@@ -1,1 +1,1 @@
-export * from "./webrcon";
+export * from './lib/webrcon';
