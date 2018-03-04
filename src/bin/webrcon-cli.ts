@@ -25,7 +25,7 @@ if (ip! === undefined || password! === undefined) {
 }
 
 (async () => {
-    const con = await WebRcon.connect(`ws://${ip!}`, password!);
+    const con = await WebRcon.connect(`${ip!}`, password!);
     const result = await con.command(command!);
     con.close();
     console.log(result);

@@ -61,7 +61,7 @@ if (ip === undefined || password === undefined) {
     var con, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, index_1.WebRcon.connect("ws://" + ip, password)];
+            case 0: return [4 /*yield*/, index_1.WebRcon.connect("" + ip, password)];
             case 1:
                 con = _a.sent();
                 return [4 /*yield*/, con.command(command)];

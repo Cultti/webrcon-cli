@@ -42,7 +42,7 @@ var WebRcon = /** @class */ (function () {
         var _this = this;
         this.connect = function () {
             return new Promise(function (resolve, reject) {
-                _this._connection = new ws(_this._address + "/" + _this._password);
+                _this._connection = new ws("ws://" + _this._address + "/" + _this._password);
                 _this._connection.on('open', function () {
                     resolve(_this);
                 });

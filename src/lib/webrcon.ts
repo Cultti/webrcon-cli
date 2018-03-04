@@ -23,7 +23,7 @@ export class WebRcon {
 
     connect = (): Promise<WebRcon> => {
         return new Promise<WebRcon>((resolve, reject) => {
-            this._connection = new ws(`${this._address}/${this._password}`);
+            this._connection = new ws(`ws://${this._address}/${this._password}`);
             this._connection.on('open', () => {
                 resolve(this);
             });
