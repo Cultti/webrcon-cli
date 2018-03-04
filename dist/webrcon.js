@@ -49,6 +49,7 @@ var WebRcon = /** @class */ (function () {
                 _this._connection.on('message', _this._handleMessage);
             });
         };
+        this.close = function () { return _this._connection.close(); };
         this.command = function (command) {
             return new Promise(function (resolve, reject) {
                 var identifier = _this._seq++;

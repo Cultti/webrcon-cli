@@ -31,6 +31,8 @@ export class WebRcon {
         });
     }
 
+    close = (): void => this._connection!.close();
+
     command = (command: string): Promise<string> => {
         return new Promise<string>((resolve, reject) => {
             const identifier = this._seq++;

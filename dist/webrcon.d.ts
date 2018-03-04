@@ -7,6 +7,7 @@ export declare class WebRcon {
     static connect: (address: string, password: string) => Promise<WebRcon>;
     constructor(address: string, password: string);
     connect: () => Promise<WebRcon>;
+    close: () => void;
     command: (command: string) => Promise<string>;
     private _handleMessage;
     private _parsePacket;
