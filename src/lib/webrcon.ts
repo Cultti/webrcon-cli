@@ -46,7 +46,7 @@ export class WebRcon {
 
             this._connection!.send(JSON.stringify(packet));
         });
-    };
+    }
 
     private _handleMessage = (data: ws.Data) => {
         const packet = this._parsePacket(data as string);
