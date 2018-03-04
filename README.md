@@ -3,22 +3,34 @@
 ```
 webrcon-cli 127.0.0.1:28016 p4ssw0rd "say Hello World"
 ```
+### Help:
+```
+$ webrcon-cli -h
+
+  Usage: webrcon-cli [options] <ip> <password> <command>
+
+
+  Options:
+
+    -V, --version  output the version number
+    -h, --help     output usage information
+```
 ### Install:
 ```
 npm -g install webrcon-cli
 ```
 ## Library
-This package also includes asynchronous library to be used with node.
-## Install:
+This package also includes asynchronous library. Typings included for typescript.
+### Install:
 ```
-npm install --save webcron-cli
+npm install --save webrcon-cli
 ```
-## Usage:
+### Usage:
 ```
-import { WebCron } from "webcron-cli"
+import { WebRcon } from "webrcon-cli"
 
 (async () => {
-    const connection = await WebCron.connect("localhost:28016", "p4ssw0rd");
+    const connection = await WebRcon.connect("localhost:28016", "p4ssw0rd");
     await connection.command("say Hello World");
 })
 ```
