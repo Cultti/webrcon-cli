@@ -21,7 +21,7 @@ export class WebRcon {
         this._resolves = [];
     }
 
-    connect(): Promise<WebRcon> {
+    connect = (): Promise<WebRcon> => {
         return new Promise<WebRcon>((resolve, reject) => {
             this._connection = new ws(`${this._address}/${this._password}`);
             this._connection.on('open', () => {
@@ -31,7 +31,7 @@ export class WebRcon {
         });
     }
 
-    command = async (command: string): Promise<string> => {
+    command = (command: string): Promise<string> => {
         return new Promise<string>((resolve, reject) => {
             const identifier = this._seq++;
             this._resolves[identifier] = resolve;

@@ -40,21 +40,27 @@ var ws = require("ws");
 var WebRcon = /** @class */ (function () {
     function WebRcon(address, password) {
         var _this = this;
-        this.command = function (command) { return __awaiter(_this, void 0, void 0, function () {
-            var _this = this;
-            return __generator(this, function (_a) {
-                return [2 /*return*/, new Promise(function (resolve, reject) {
-                        var identifier = _this._seq++;
-                        _this._resolves[identifier] = resolve;
-                        var packet = {
-                            Identifier: identifier,
-                            Message: command,
-                            Name: 'WebRcon'
-                        };
-                        _this._connection.send(JSON.stringify(packet));
-                    })];
+        this.connect = function () {
+            return new Promise(function (resolve, reject) {
+                _this._connection = new ws(_this._address + "/" + _this._password);
+                _this._connection.on('open', function () {
+                    resolve(_this);
+                });
+                _this._connection.on('message', _this._handleMessage);
             });
-        }); };
+        };
+        this.command = function (command) {
+            return new Promise(function (resolve, reject) {
+                var identifier = _this._seq++;
+                _this._resolves[identifier] = resolve;
+                var packet = {
+                    Identifier: identifier,
+                    Message: command,
+                    Name: 'WebRcon'
+                };
+                _this._connection.send(JSON.stringify(packet));
+            });
+        };
         this._handleMessage = function (data) {
             var packet = _this._parsePacket(data);
             if (!_this._resolves[packet.Identifier]) {
@@ -69,16 +75,6 @@ var WebRcon = /** @class */ (function () {
         this._seq = 1;
         this._resolves = [];
     }
-    WebRcon.prototype.connect = function () {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            _this._connection = new ws(_this._address + "/" + _this._password);
-            _this._connection.on('open', function () {
-                resolve(_this);
-            });
-            _this._connection.on('message', _this._handleMessage);
-        });
-    };
     WebRcon.connect = function (address, password) { return __awaiter(_this, void 0, void 0, function () {
         var webRcon;
         return __generator(this, function (_a) {
