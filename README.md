@@ -1,4 +1,4 @@
-# WebRcon command line interface
+# WebRcon command line interface [![Build Status](https://travis-ci.org/Cultti/webrcon-cli.svg?branch=master)](https://travis-ci.org/Cultti/webrcon-cli) [![Coverage Status](https://coveralls.io/repos/github/Cultti/webrcon-cli/badge.svg)](https://coveralls.io/github/Cultti/webrcon-cli)
 Cli and library to control servers that support webrcon. Eg. Rust.
 ### Basic usage:
 Remember to enable webrcon in rust server by setting `rcon.web 1`
