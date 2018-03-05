@@ -15,13 +15,13 @@ describe('Class Webrcon', () => {
 
     let server: ws.Server;
 
-    beforeEach(() => {
+    before(() => {
         server = new ws.Server(socketServerOptions);
     });
 
-    afterEach(() => {
+    after(() => {
         server.close();
-    })
+    });
 
     it('should connect to WebSocket server', async () => {
         const connection = await WebRcon.connect(
