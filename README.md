@@ -1,7 +1,13 @@
-# WebRcon command line interface
+# WebRcon command line interface [![Build Status](https://travis-ci.org/Cultti/webrcon-cli.svg?branch=master)](https://travis-ci.org/Cultti/webrcon-cli) [![Coverage Status](https://coveralls.io/repos/github/Cultti/webrcon-cli/badge.svg)](https://coveralls.io/github/Cultti/webrcon-cli)
+Cli and library to control servers that support webrcon. Eg. Rust.
 ### Basic usage:
+Remember to enable webrcon in rust server by setting `rcon.web 1`
 ```
 webrcon-cli 127.0.0.1:28016 p4ssw0rd "say Hello World"
+```
+### Install:
+```
+$ npm -g install webrcon-cli
 ```
 ### Help:
 ```
@@ -15,18 +21,14 @@ $ webrcon-cli -h
     -V, --version  output the version number
     -h, --help     output usage information
 ```
-### Install:
-```
-npm -g install webrcon-cli
-```
 ## Library
-This package also includes asynchronous library. Typings included for typescript.
+This package also includes asynchronous library to be used with node. Typings are included for typescript.
 ### Install:
 ```
-npm install --save webrcon-cli
+$ npm install --save webrcon-cli
 ```
 ### Usage:
-```
+```typescript
 import { WebRcon } from "webrcon-cli"
 
 (async () => {
