@@ -43,22 +43,26 @@ describe('Class Webrcon', () => {
         expect(onSpy.withArgs('message', sinon.match.func).callCount).to.equal(1);
     });
 
-    it('should send command to the server', (done) => {
-        new Promise(async (resolve, reject) => {
+    it('should send command to the server', () => {
+        return new Promise(async (resolve, reject) => {
             server.once('connection', (socket, request) => {
                 socket.once('message', (data) => {
                     const parsedData = JSON.parse(data);
                     expect(parsedData.Message).to.equal('users');
-                    done();
+                    resolve();
                 });
             });
-    
-            const connection = await WebRcon.connect(
-                `localhost:${socketServerOptions.port}`,
-                password
-            );
-            await connection.command('users');
-            connection.close();
+
+            try {
+                const connection = await WebRcon.connect(
+                    `localhost:${socketServerOptions.port}`,
+                    password
+                );
+                await connection.command('users');
+                connection.close();
+            } catch (error) {
+                reject(error);
+            }
         });
     });
 });
