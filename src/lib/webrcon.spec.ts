@@ -4,6 +4,7 @@ import * as sinon from 'sinon';
 
 import * as ws from 'ws';
 import { WebRcon } from './webrcon';
+import { WebRconSendPacket } from './interfaces';
 
 describe('Class Webrcon', () => {
     const password = 'p4ssword';
@@ -46,26 +47,23 @@ describe('Class Webrcon', () => {
         expect(onSpy.withArgs('message', sinon.match.func).callCount).to.equal(1);
     });
 
-    it('should send command to the server', () => {
-        return new Promise(async (resolve, reject) => {
-            server.once('connection', (socket, request) => {
-                socket.once('message', (data) => {
-                    const parsedData = JSON.parse(data);
-                    expect(parsedData.Message).to.equal('users');
-                    resolve();
-                });
+    it('should send message to server', (done) => {
+        const testMessage = 'test';
+        server.once('connection', (ws, request) => {
+            ws.once('message', (data: string) => {
+                var parsed = JSON.parse(data) as WebRconSendPacket;
+                expect(parsed.Identifier).to.eq(1);
+                expect(parsed.Message).to.eq(testMessage);
+                expect(parsed.Name).to.eq('WebRcon');
+                done();
             });
+        });
 
-            try {
-                const connection = await WebRcon.connect(
-                    `localhost:${socketServerOptions.port}`,
-                    password
-                );
-                await connection.command('users');
-                connection.close();
-            } catch (error) {
-                reject(error);
-            }
+        WebRcon.connect(
+            `localhost:${socketServerOptions.port}`,
+            password
+        ).then(connection => {
+           var result = connection.command(testMessage).then(x => connection.close());
         });
     });
 });
