@@ -4,7 +4,7 @@ import * as sinon from 'sinon';
 
 import * as ws from 'ws';
 import { WebRcon } from './webrcon';
-import { WebRconSendPacket } from './interfaces';
+import { WebRconSendPacket, WebRconReceivePacket } from './interfaces';
 
 describe('Class Webrcon', () => {
     const password = 'p4ssword';
@@ -64,6 +64,32 @@ describe('Class Webrcon', () => {
             password
         ).then(connection => {
            var result = connection.command(testMessage).then(x => connection.close());
+        });
+    });
+
+    it('should listen for message reply', (done) => {
+        const replyMessage = {
+            Message: 'pong',
+        } as WebRconReceivePacket;
+        const testMessage = 'ping';
+        
+        server.once('connection', (socket: ws, request) => {
+            socket.once('message', (data: string) => {
+                var parsed = JSON.parse(data) as WebRconSendPacket;
+                expect(parsed.Message).to.eq(testMessage);
+                replyMessage.Identifier = parsed.Identifier;
+                socket.send(JSON.stringify(replyMessage));
+            });
+        });
+
+        WebRcon.connect(
+            `localhost:${socketServerOptions.port}`,
+            password
+        ).then(async (connection) => {
+           var result = await connection.command(testMessage);
+           expect(result).to.eq(replyMessage.Message);
+           connection.close();
+           done();
         });
     });
 });
