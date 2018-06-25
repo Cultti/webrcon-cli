@@ -49,8 +49,8 @@ describe('Class Webrcon', () => {
 
     it('should send message to server', (done) => {
         const testMessage = 'test';
-        server.once('connection', (ws, request) => {
-            ws.once('message', (data: string) => {
+        server.once('connection', (socket, request) => {
+            socket.once('message', (data: string) => {
                 var parsed = JSON.parse(data) as WebRconSendPacket;
                 expect(parsed.Identifier).to.eq(1);
                 expect(parsed.Message).to.eq(testMessage);
