@@ -23,12 +23,15 @@ describe('Class Webrcon', () => {
         server.close();
     });
 
-    it('should connect to WebSocket server', async () => {
-        const connection = await WebRcon.connect(
+    it('should connect to WebSocket server', (done) => {
+        server.once('connection', (socket, request) => {
+            done();
+        });
+
+        WebRcon.connect(
             `localhost:${socketServerOptions.port}`,
             password
-        );
-        connection.close();
+        ).then(connection => connection.close());
     });
 
     it('should subscribe message event once', async () => {
