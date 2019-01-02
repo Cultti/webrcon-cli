@@ -58,13 +58,32 @@ var WebRcon = /** @class */ (function (_super) {
         _this.connect = function () {
             return new Promise(function (resolve, reject) {
                 _this._connection = new ws("ws://" + _this._address + "/" + _this._password);
+                _this._connection.on('error', function (data) {
+                    _this.emit('error', data);
+                });
                 _this._connection.on('open', function () {
                     resolve(_this);
                 });
                 _this._connection.on('message', _this._handleMessage);
+                _this._connection.on('close', function () { return _this.emit('close'); });
             });
         };
         _this.close = function () { return _this._connection.close(); };
+        _this.reconnect = function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (this._connection.readyState === ws.OPEN) {
+                            this.close();
+                        }
+                        this._connection = undefined;
+                        return [4 /*yield*/, this.connect()];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        }); };
         _this.command = function (command) {
             return new Promise(function (resolve, reject) {
                 var identifier = _this._seq++;
