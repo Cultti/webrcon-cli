@@ -54,6 +54,9 @@ export class WebRcon extends EventEmitter {
         const packet = this._parsePacket(data as string);
         
         if (!this._resolves[packet.Identifier]) {
+            if (packet.Type === 'Chat') {
+                this.emit('chat', JSON.parse(packet.Message))
+            }
             return this.emit('message', packet);
         }
 

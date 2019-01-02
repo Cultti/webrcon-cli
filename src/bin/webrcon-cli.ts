@@ -28,9 +28,7 @@ if (ip! === undefined || password! === undefined) {
     const con = await WebRcon.connect(`${ip!}`, password!);
     if (command! === undefined) {
         con.on('message', (data) => {
-            if (data.Type === 'Generic') {
-                console.log(data.Message);
-            }
+            console.log(data.Message);
         });
     } else {
         const result = await con.command(command!);
