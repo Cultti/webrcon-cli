@@ -1,7 +1,8 @@
 import * as ws from 'ws';
 import { ResolveArray, WebRconSendPacket, WebRconReceivePacket } from './interfaces';
+import { EventEmitter } from 'events';
 
-export class WebRcon {
+export class WebRcon extends EventEmitter {
     private _connection: ws | undefined;
     private _address: string;
     private _password: string;
@@ -14,6 +15,7 @@ export class WebRcon {
     }
 
     constructor(address: string, password: string) {
+        super();
         this._address = address;
         this._password = password;
         this._connection = undefined;
@@ -52,11 +54,13 @@ export class WebRcon {
         const packet = this._parsePacket(data as string);
         
         if (!this._resolves[packet.Identifier]) {
-            // Some other message...
-            return;
+            if (packet.Type === 'Chat') {
+                this.emit('chat', JSON.parse(packet.Message))
+            }
+            return this.emit('message', packet);
         }
 
-        this._resolves[packet.Identifier](packet.Message);
+        return this._resolves[packet.Identifier](packet.Message);
     }
 
     private _parsePacket = (data: string): WebRconReceivePacket => JSON.parse(data);

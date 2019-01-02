@@ -11,7 +11,7 @@ let command: string;
 
 cmder
     .version(version)
-    .arguments('<ip> <password> <command>')
+    .arguments('<ip> <password> [command]')
     .action((_ip, _password, _command) => {
         ip = _ip;
         password = _password;
@@ -26,7 +26,13 @@ if (ip! === undefined || password! === undefined) {
 
 (async () => {
     const con = await WebRcon.connect(`${ip!}`, password!);
-    const result = await con.command(command!);
-    con.close();
-    console.log(result);
+    if (command! === undefined) {
+        con.on('message', (data) => {
+            console.log(data.Message);
+        });
+    } else {
+        const result = await con.command(command!);
+        con.close();
+        console.log(result);
+    }
 })();

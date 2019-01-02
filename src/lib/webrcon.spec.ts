@@ -92,4 +92,55 @@ describe('Class Webrcon', () => {
            done();
         });
     });
+
+    it('should relay unknown messages', (done) => {
+        const replyMessage = {
+            Message: 'pong',
+        } as WebRconReceivePacket;
+
+        var client;
+        server.once('connection', (socket: ws, request) => {
+            client = socket;
+        });
+
+        WebRcon.connect(
+            `localhost:${socketServerOptions.port}`,
+            password
+        ).then(async (connection) => {
+            connection.on('message', (data) => {
+                expect(data.Message).to.eq(replyMessage.Message);
+
+                connection.close();
+                done();
+            });
+
+            client.send(JSON.stringify(replyMessage));
+         });
+    });
+
+    it('should relay chat messages', (done) => {
+        const replyMessage = {
+            Message: '{\n  "Message": "This is test message",\n  "UserId": 123456789,\n  "Username": "Test User",\n  "Color": "#5af",\n  "Time": 1546426639\n}',
+            Type: 'Chat'
+        } as WebRconReceivePacket;
+
+        var client;
+        server.once('connection', (socket: ws, request) => {
+            client = socket;
+        });
+
+        WebRcon.connect(
+            `localhost:${socketServerOptions.port}`,
+            password
+        ).then(async (connection) => {
+            connection.on('chat', (data) => {
+                expect(data.Message).to.eq('This is test message');
+
+                connection.close();
+                done();
+            });
+
+            client.send(JSON.stringify(replyMessage));
+         });
+    })
 });

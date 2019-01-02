@@ -13,7 +13,7 @@ $ npm -g install webrcon-cli
 ```
 $ webrcon-cli -h
 
-  Usage: webrcon-cli [options] <ip> <password> <command>
+  Usage: webrcon-cli [options] <ip> <password> [command]
 
 
   Options:
@@ -34,6 +34,14 @@ import { WebRcon } from "webrcon-cli"
 (async () => {
     const connection = await WebRcon.connect("localhost:28016", "p4ssw0rd");
     await connection.command("say Hello World");
+
+    connection.on('message', (data) => {
+        console.log(data);
+    });
+
+    connection.on('chat', (data) => {
+        console.log(data);
+    });
 })
 ```
 ## License
