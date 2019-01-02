@@ -13,7 +13,7 @@ $ npm -g install webrcon-cli
 ```
 $ webrcon-cli -h
 
-  Usage: webrcon-cli [options] <ip> <password> <command>
+  Usage: webrcon-cli [options] <ip> <password> [command]
 
 
   Options:
