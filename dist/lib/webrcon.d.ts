@@ -1,4 +1,6 @@
-export declare class WebRcon {
+/// <reference types="node" />
+import { EventEmitter } from 'events';
+export declare class WebRcon extends EventEmitter {
     private _connection;
     private _address;
     private _password;

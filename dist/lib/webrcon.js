@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -14,8 +27,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -37,10 +50,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var ws = require("ws");
-var WebRcon = /** @class */ (function () {
+var events_1 = require("events");
+var WebRcon = /** @class */ (function (_super) {
+    __extends(WebRcon, _super);
     function WebRcon(address, password) {
-        var _this = this;
-        this.connect = function () {
+        var _this = _super.call(this) || this;
+        _this.connect = function () {
             return new Promise(function (resolve, reject) {
                 _this._connection = new ws("ws://" + _this._address + "/" + _this._password);
                 _this._connection.on('open', function () {
@@ -49,8 +64,8 @@ var WebRcon = /** @class */ (function () {
                 _this._connection.on('message', _this._handleMessage);
             });
         };
-        this.close = function () { return _this._connection.close(); };
-        this.command = function (command) {
+        _this.close = function () { return _this._connection.close(); };
+        _this.command = function (command) {
             return new Promise(function (resolve, reject) {
                 var identifier = _this._seq++;
                 _this._resolves[identifier] = resolve;
@@ -62,20 +77,23 @@ var WebRcon = /** @class */ (function () {
                 _this._connection.send(JSON.stringify(packet));
             });
         };
-        this._handleMessage = function (data) {
+        _this._handleMessage = function (data) {
             var packet = _this._parsePacket(data);
             if (!_this._resolves[packet.Identifier]) {
-                // Some other message...
-                return;
+                if (packet.Type === 'Chat') {
+                    _this.emit('chat', JSON.parse(packet.Message));
+                }
+                return _this.emit('message', packet);
             }
-            _this._resolves[packet.Identifier](packet.Message);
+            return _this._resolves[packet.Identifier](packet.Message);
         };
-        this._parsePacket = function (data) { return JSON.parse(data); };
-        this._address = address;
-        this._password = password;
-        this._connection = undefined;
-        this._seq = 1;
-        this._resolves = [];
+        _this._parsePacket = function (data) { return JSON.parse(data); };
+        _this._address = address;
+        _this._password = password;
+        _this._connection = undefined;
+        _this._seq = 1;
+        _this._resolves = [];
+        return _this;
     }
     WebRcon.connect = function (address, password) { return __awaiter(_this, void 0, void 0, function () {
         var webRcon;
@@ -89,5 +107,5 @@ var WebRcon = /** @class */ (function () {
         });
     }); };
     return WebRcon;
-}());
+}(events_1.EventEmitter));
 exports.WebRcon = WebRcon;
