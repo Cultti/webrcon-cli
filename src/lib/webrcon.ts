@@ -26,14 +26,26 @@ export class WebRcon extends EventEmitter {
     connect = (): Promise<WebRcon> => {
         return new Promise<WebRcon>((resolve, reject) => {
             this._connection = new ws(`ws://${this._address}/${this._password}`);
+            this._connection.on('error', (data) => {
+                this.emit('error', data);
+            });
             this._connection.on('open', () => {
                 resolve(this);
             });
             this._connection.on('message', this._handleMessage);
+            this._connection.on('close', () => this.emit('close'));
         });
     }
 
     close = (): void => this._connection!.close();
+
+    reconnect = async (): Promise<void> => {
+        if(this._connection!.readyState === ws.OPEN) {
+            this.close();
+        }
+        this._connection = undefined;
+        await this.connect();
+    }
 
     command = (command: string): Promise<string> => {
         return new Promise<string>((resolve, reject) => {

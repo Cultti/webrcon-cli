@@ -10,6 +10,7 @@ export declare class WebRcon extends EventEmitter {
     constructor(address: string, password: string);
     connect: () => Promise<WebRcon>;
     close: () => void;
+    reconnect: () => Promise<void>;
     command: (command: string) => Promise<string>;
     private _handleMessage;
     private _parsePacket;
