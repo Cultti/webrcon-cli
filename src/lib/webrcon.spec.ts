@@ -92,4 +92,29 @@ describe('Class Webrcon', () => {
            done();
         });
     });
+
+    it('should relay unknown messages', (done) => {
+        const replyMessage = {
+            Message: 'pong',
+        } as WebRconReceivePacket;
+
+        var client;
+        server.once('connection', (socket: ws, request) => {
+            client = socket;
+        });
+
+        WebRcon.connect(
+            `localhost:${socketServerOptions.port}`,
+            password
+        ).then(async (connection) => {
+            connection.on('message', (data) => {
+                expect(data.Message).to.eq(replyMessage.Message);
+            });
+
+            client.send(JSON.stringify(replyMessage));
+
+            connection.close();
+            done();
+         });
+    })
 });
