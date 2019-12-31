@@ -31,7 +31,7 @@ if (ip! === undefined || password! === undefined) {
             console.log(data.Message);
         });
     } else {
-        const result = await con.command(command!);
+        const result = await con.command(command!, !command!.startsWith("say"));
         con.close();
         console.log(result);
     }

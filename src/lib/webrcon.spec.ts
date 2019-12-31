@@ -35,6 +35,26 @@ describe('Class Webrcon', () => {
         ).then(connection => connection.close());
     });
 
+    it('should close connection', (done) => {
+        var client : ws;
+        server.once('connection', (socket: ws, request) => {
+            client = socket;
+        });
+
+        WebRcon.connect(
+            `localhost:${socketServerOptions.port}`,
+            password
+        ).then(async (connection) => {
+            connection.close();
+
+            setTimeout(() => {
+                expect(client.readyState).to.eq(client.CLOSED);
+
+                done();
+            }, 25);
+         });
+    });
+
     it('should subscribe message event once', async () => {
         const onSpy = sinon.spy(ws.prototype, 'on');
 
@@ -142,5 +162,5 @@ describe('Class Webrcon', () => {
 
             client.send(JSON.stringify(replyMessage));
          });
-    })
+    });
 });
