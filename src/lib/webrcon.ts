@@ -47,10 +47,9 @@ export class WebRcon extends EventEmitter {
         await this.connect();
     }
 
-    command = (command: string): Promise<string> => {
+    command = (command: string, wait = true): Promise<string> => {
         return new Promise<string>((resolve, reject) => {
             const identifier = this._seq++;
-            this._resolves[identifier] = resolve;
 
             const packet: WebRconSendPacket = {
                 Identifier: identifier,
@@ -59,6 +58,11 @@ export class WebRcon extends EventEmitter {
             };
 
             this._connection!.send(JSON.stringify(packet));
+
+            if (!wait) {
+                return resolve();
+            }
+            this._resolves[identifier] = resolve;
         });
     }
 
