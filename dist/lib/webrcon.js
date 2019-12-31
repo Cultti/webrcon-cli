@@ -84,16 +84,20 @@ var WebRcon = /** @class */ (function (_super) {
                 }
             });
         }); };
-        _this.command = function (command) {
+        _this.command = function (command, wait) {
+            if (wait === void 0) { wait = true; }
             return new Promise(function (resolve, reject) {
                 var identifier = _this._seq++;
-                _this._resolves[identifier] = resolve;
                 var packet = {
                     Identifier: identifier,
                     Message: command,
                     Name: 'WebRcon'
                 };
                 _this._connection.send(JSON.stringify(packet));
+                if (!wait) {
+                    return resolve();
+                }
+                _this._resolves[identifier] = resolve;
             });
         };
         _this._handleMessage = function (data) {

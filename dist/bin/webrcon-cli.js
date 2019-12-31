@@ -69,7 +69,7 @@ if (ip === undefined || password === undefined) {
                     console.log(data.Message);
                 });
                 return [3 /*break*/, 4];
-            case 2: return [4 /*yield*/, con.command(command)];
+            case 2: return [4 /*yield*/, con.command(command, !command.startsWith("say"))];
             case 3:
                 result = _a.sent();
                 con.close();
