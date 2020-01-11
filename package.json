@@ -1,6 +1,6 @@
 {
   "name": "webrcon-cli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Webrcon-cli allows you to connect webrcon supported servers. Eg. Rust.",
   "main": "dist/index.js",
   "scripts": {

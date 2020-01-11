@@ -95,7 +95,7 @@ var WebRcon = /** @class */ (function (_super) {
                 };
                 _this._connection.send(JSON.stringify(packet));
                 if (!wait) {
-                    return resolve();
+                    return resolve("Command executed: " + command);
                 }
                 _this._resolves[identifier] = resolve;
             });
