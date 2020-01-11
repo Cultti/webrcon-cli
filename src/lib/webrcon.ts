@@ -60,7 +60,7 @@ export class WebRcon extends EventEmitter {
             this._connection!.send(JSON.stringify(packet));
 
             if (!wait) {
-                return resolve();
+                return resolve("Command executed: " + command);
             }
             this._resolves[identifier] = resolve;
         });
